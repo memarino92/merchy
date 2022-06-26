@@ -54,3 +54,5 @@ orderDetected()
   .finally(async () => {
     await db.$disconnect();
   });
+
+module.exports = orderDetected;
