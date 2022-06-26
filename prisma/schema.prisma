@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// example:
+// model Tab {
+//   id           String        @id @default(cuid())
+//   createdAt    DateTime      @default(now())
+//   name         String?
+//   expenseLists ExpenseList[]
+//   users        User[]
+// }
+
+model Item {
+  sale_item_id           String        @id
+  order_date             DateTime
+  payment_state          String
+  quantity               Int 
+  sku                    String?
+  sub_total              Decimal
+  package_id             String
+  ship_date              DateTime?
+  payment_id             String
+  tax                    Decimal?
+  paypal_id              String?
+  ship_notes             String?
+  currency               String?
+  order_total            Decimal
+  shipping               Decimal?
+  item_url               String?
+  item_name              String
+  option                 String?
+  option_id              String?
+  selling_band_url       String?
+  ship_from_country_name String?
+  artist                 String
+  discount_code          String?
+  buyer_name             String?
+  buyer_email            String?
+  buyer_phone            String?
+  buyer_note             String?
+  ship_to_name           String?
+  ship_to_street         String?
+  ship_to_street_2       String?
+  ship_to_city           String?
+  ship_to_state          String?
+  ship_to_zip            String?
+  ship_to_country        String?
+  ship_to_country_code   String?
+}

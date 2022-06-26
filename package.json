@@ -2,13 +2,18 @@
   "name": "merchy",
   "version": "0.0.1",
   "description": "A Slack integration for merch notifications through the Bandcamp API",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
   },
   "author": "Michael Marino",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^3.15.2",
     "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "prisma": "^3.15.2"
   }
 }

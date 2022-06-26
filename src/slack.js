@@ -8,8 +8,8 @@ async function postSlackMessage(messageText) {
       'content-type': 'application/json',
     },
   });
-  if (res.ok) console.log('Success!');
-  else console.log('Something went wrong');
+  if (res.ok) console.log('Slack message sent!');
+  else console.log('Something went wrong - slack message not sent');
 }
 
 module.exports = { postSlackMessage };
