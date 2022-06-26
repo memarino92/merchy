@@ -2,8 +2,17 @@ require('dotenv').config();
 const { postSlackMessage } = require('./slack');
 const BandcampClient = require('./bandcamp');
 
-const main = async () => {
-  let client = new BandcampClient();
+let client = new BandcampClient();
+
+const main = async (client) => {
   console.log(await client.getOrders(process.env.BANDCAMP_BAND_ID));
 };
-main();
+
+let minutes = 0.25;
+
+let interval = minutes * 60 * 1000;
+
+setInterval(() => {
+  console.log('Checking...');
+  main(client);
+}, interval);
