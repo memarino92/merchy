@@ -14,10 +14,10 @@ async function orderDetected(data) {
     });
     if (item === null) {
       const message =
-        `New Merch Order!\nOrder Details:\n` +
-        `Item:\n${data[i]['item_name']}\n` +
-        (data[i]['option'] ? `Option: ${data[i]['option']}\n` : '') +
-        `Address:\n` +
+        `New Merch Order!\n\n` +
+        `Item:\n${data[i]['item_name']}\n\n` +
+        (data[i]['option'] ? `Option:\n${data[i]['option']}\n\n` : '') +
+        `Address:\n\n` +
         `${data[i]['ship_to_name']}\n` +
         `${data[i]['ship_to_street']}\n` +
         (data[i]['ship_to_street_2']
@@ -46,13 +46,5 @@ async function orderDetected(data) {
     }
   }
 }
-
-orderDetected()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await db.$disconnect();
-  });
 
 module.exports = orderDetected;
