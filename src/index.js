@@ -23,7 +23,7 @@ const checkForOrders = async (client) => {
   }
 };
 
-let minutes = 0.1;
+let minutes = 0.5;
 let interval = minutes * 60 * 1000;
 
 setInterval(() => {
