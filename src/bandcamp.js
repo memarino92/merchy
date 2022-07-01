@@ -1,14 +1,89 @@
 class BandcampClient {
-  bandcampTokenUri = `${process.env.BANDCAMP_AUTH_URL}?client_id=${process.env.BANDCAMP_CLIENT_ID}&client_secret=${process.env.BANDCAMP_CLIENT_SECRET}&grant_type=client_credentials`;
+  constructor(clientId, clientSecret) {
+    this.tokenUri = 'https://bandcamp.com/oauth_token';
+    this.token = null;
+    this.refreshToken = null;
+    this.expiresAt = null;
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+  }
 
   getToken = async () => {
-    let res = await fetch(this.bandcampTokenUri, {
+    if (this.expiresAt && new Date().getTime() >= this.expiresAt)
+      this.token = null;
+
+    if (this.token) return this.token;
+
+    await this.fetchToken();
+
+    return this.token;
+  };
+
+  fetchToken = async () => {
+    if (this.refreshToken) {
+      let refreshTokenUri =
+        this.tokenUri +
+        `?refresh_token=${this.refreshToken}` +
+        `&client_id=${this.clientId}` +
+        `&client_secret=${this.clientSecret}` +
+        `&grant_type=refresh_token`;
+
+      let res = await fetch(refreshTokenUri, {
+        method: 'POST',
+      });
+
+      if (res.ok) {
+        let body = await res.json();
+        console.log(
+          `${new Date().toISOString()} Successfully retrieved Bandcamp access token using refresh token`
+        );
+        this.token = body.access_token;
+        this.expiresAt = new Date().getTime() + body.expires_in;
+        this.refreshToken = body.refresh_token;
+
+        return;
+      }
+
+      //if fetching new token fails clear refresh token
+      this.refreshToken = null;
+
+      let body = await res.json();
+      console.log(
+        `${new Date().toISOString()} Error fetching access token using refresh token:\n`,
+        body
+      );
+      return;
+    }
+
+    let tokenUri =
+      this.tokenUri +
+      `?client_id=${this.clientId}` +
+      `&client_secret=${this.clientSecret}` +
+      `&grant_type=client_credentials`;
+
+    let res = await fetch(tokenUri, {
       method: 'POST',
     });
+
     if (res.ok) {
       let body = await res.json();
-      return body.access_token;
+      console.log(
+        `${new Date().toISOString()} Successfully retrieved Bandcamp access token`
+      );
+      this.token = body.access_token;
+      this.expiresAt = new Date().getTime() + body.expires_in;
+      this.refreshToken = body.refresh_token;
+
+      return;
     }
+
+    let body = await res.json();
+    console.log(
+      `${new Date().toISOString()} Error fetching access token:\n`,
+      body
+    );
+
+    return;
   };
 
   getOrders = async (bandId) => {
