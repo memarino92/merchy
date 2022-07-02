@@ -1,17 +1,17 @@
 class BandcampClient {
   constructor(clientId, clientSecret) {
     this.tokenUri = 'https://bandcamp.com/oauth_token';
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
     this.token = null;
     this.refreshToken = null;
     this.expiresAt = null;
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
   }
 
   getToken = async () => {
-    if (this.expiresAt && new Date().getTime() >= this.expiresAt)
+    if (this.expiresAt && new Date().getTime() >= this.expiresAt) {
       this.token = null;
-
+    }
     if (this.token) return this.token;
 
     await this.fetchToken();
@@ -38,7 +38,7 @@ class BandcampClient {
           `${new Date().toISOString()} Successfully retrieved Bandcamp access token using refresh token`
         );
         this.token = body.access_token;
-        this.expiresAt = new Date().getTime() + body.expires_in;
+        this.expiresAt = new Date().getTime() + body.expires_in * 1000;
         this.refreshToken = body.refresh_token;
 
         return;
@@ -82,6 +82,8 @@ class BandcampClient {
       `${new Date().toISOString()} Error fetching access token:\n`,
       body
     );
+
+    await this.fetchToken();
 
     return;
   };
